@@ -15,7 +15,6 @@ select.addEventListener('change', onChange);
 
 fetchBreeds()
   .then(function (data) {
-    error.hidden = true;
     select.hidden = true;
     const markup = data
       .map(({ name, id }) => `<option value="${id}">${name}</option>`)
@@ -34,7 +33,6 @@ fetchBreeds()
 
 function onChange(evt) {
   loader.hidden = false;
-  error.hidden = true;
   fetchCatByBreed(evt.target.value)
     .then(data => {
       const image = data[0].url;
