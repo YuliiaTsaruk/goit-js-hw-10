@@ -8,14 +8,13 @@ const loader = document.querySelector('.loader');
 const error = document.querySelector('.error');
 const container = document.querySelector('.cat-info');
 
-loader.hidden = true;
 error.hidden = true;
-select.hidden = true;
 select.addEventListener('change', onChange);
 
 fetchBreeds()
   .then(function (data) {
-    select.hidden = true;
+    loader.hidden = true;
+    error.hidden = true;
     const markup = data
       .map(({ name, id }) => `<option value="${id}">${name}</option>`)
       .join('');
@@ -23,16 +22,18 @@ fetchBreeds()
     new SlimSelect({
       select: '#selectElement',
     });
-    select.hidden = false;
   })
   .catch(error => {
-    error.hidden = false;
     Report.failure('Oops! Something went wrong! Try reloading the page!');
+    loader.hidden = true;
+    error.hidden = false;
+    container.innerHTML = '';
   })
   .finally(() => loader.classList.add('is-hidden'));
 
 function onChange(evt) {
   loader.hidden = false;
+  error.hidden = true;
   fetchCatByBreed(evt.target.value)
     .then(data => {
       const image = data[0].url;
