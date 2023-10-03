@@ -8,13 +8,13 @@ const loader = document.querySelector('.loader');
 const error = document.querySelector('.error');
 const container = document.querySelector('.cat-info');
 
-error.hidden = true;
 select.addEventListener('change', onChange);
+
+select.hidden = true;
+loader.hidden = false;
 
 fetchBreeds()
   .then(function (data) {
-    loader.hidden = true;
-    error.hidden = true;
     const markup = data
       .map(({ name, id }) => `<option value="${id}">${name}</option>`)
       .join('');
@@ -22,6 +22,8 @@ fetchBreeds()
     new SlimSelect({
       select: '#selectElement',
     });
+    loader.hidden = true;
+    select.hidden = false;
   })
   .catch(error => {
     Report.failure('Oops! Something went wrong! Try reloading the page!');
@@ -33,7 +35,7 @@ fetchBreeds()
 
 function onChange(evt) {
   loader.hidden = false;
-  error.hidden = true;
+  select.hidden = true;
   fetchCatByBreed(evt.target.value)
     .then(data => {
       const image = data[0].url;
@@ -48,6 +50,8 @@ function onChange(evt) {
       <h3 class="js-cat-temp-title">Temperament:</h3>
       <p>${temperament}</p>
     </div>`;
+
+      select.hidden = false;
       loader.hidden = true;
     })
     .catch(err => {
@@ -55,6 +59,7 @@ function onChange(evt) {
       console.log(err);
       loader.hidden = true;
       error.hidden = false;
+      select.hidden = false;
       container.innerHTML = '';
     });
 }
