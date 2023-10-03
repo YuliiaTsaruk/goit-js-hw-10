@@ -58,7 +58,8 @@ function onChange(evt) {
       Report.failure('Oops! Something went wrong! Try reloading the page!');
       console.log(err);
       loader.hidden = true;
-      select.hidden = false;
+      select.hidden = true;
+      error.hidden = false;
       container.innerHTML = '';
     });
 }
